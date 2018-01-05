@@ -1,0 +1,945 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "臺中市政府秘書處資訊管理系統 API",
+    "version": "1.0.0",
+    "description": "這是臺中市政府秘書處集合各項自行開發系統之API資源，除政府開放資料資源無須授權即可取用外，其餘資源如有需要介接使用，建請洽本處聯絡人林管理師。",
+    "contact": {
+      "name": "Lin, Ying-Chin",
+      "email": "ar0660@taichung.gov.tw"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/mit-license.php"
+    }
+  },
+  "host": "api.secret.taichung.gov.tw",
+  "basePath": "/v1.0",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "tags": [
+    {
+      "name": "users",
+      "description": "有關使用者管理的各種運算"
+    },
+    {
+      "name": "sfc",
+      "description": "有關臺中市與各國際姊妹市暨友好城市締結資料集"
+    },
+    {
+      "name": "seit",
+      "description": "有關社交工程演練郵件軟體檢測系統相關API資源"
+    },
+    {
+      "name": "tg",
+      "description": "有關臺中市政府公報資訊網系統相關API資源"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "取得所有使用者資料",
+        "operationId": "UserController_getUsers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "新增使用者",
+        "operationId": "UserController_register",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "帳號",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "密碼",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "姓名",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Result"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/users/{uid}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "取得特定使用者資料",
+        "operationId": "UserController_getUsers_uid",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "使用者編號",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "刪除特定使用者",
+        "operationId": "UserController_delete",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "使用者編號",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Result"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/users/login": {
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "summary": "使用者登入",
+        "operationId": "UserController_login",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "帳號",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "密碼",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          }
+        }
+      }
+    },
+    "/sfc/cities": {
+      "get": {
+        "tags": [
+          "sfc"
+        ],
+        "summary": "取得所有臺中市與各國際姊妹市暨友好城市締結資料",
+        "operationId": "SfcController_getCities",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/City"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sfc/cities/refresh": {
+      "patch": {
+        "tags": [
+          "sfc"
+        ],
+        "summary": "刷新/sfc/cities Redis資料快取",
+        "operationId": "SfcController_refresh",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/City"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/seit/mails": {
+      "get": {
+        "tags": [
+          "seit"
+        ],
+        "summary": "取得所有測試郵件",
+        "operationId": "SeitController_getMails",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Mail"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/seit/mails/{id}": {
+      "post": {
+        "tags": [
+          "seit"
+        ],
+        "summary": "新增特定單位內各成員的測試郵件",
+        "operationId": "SeitController_insertMails_did",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "單位編號(did)",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Result"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "seit"
+        ],
+        "summary": "更新特定測試郵件的狀態",
+        "operationId": "SeitController_updateMail_mid",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "測試郵件編號(mid)",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "delivery_time",
+            "in": "query",
+            "description": "更新郵件傳遞時間",
+            "type": "number"
+          },
+          {
+            "name": "mail_status",
+            "in": "query",
+            "description": "更新郵件狀態",
+            "type": "string"
+          },
+          {
+            "name": "fail_time",
+            "in": "query",
+            "description": "更新觸發郵件時間",
+            "type": "number"
+          },
+          {
+            "name": "test_status",
+            "in": "query",
+            "description": "更新郵件檢測狀態",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Result"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/seit/mails/{mid}/send": {
+      "patch": {
+        "tags": [
+          "seit"
+        ],
+        "summary": "更新特定測試郵件的狀態",
+        "operationId": "SeitController_sendMail_mid",
+        "parameters": [
+          {
+            "name": "mid",
+            "in": "path",
+            "description": "測試郵件編號",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Result"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/seit/images/{jwt}": {
+      "get": {
+        "tags": [
+          "seit"
+        ],
+        "summary": "顯示測試郵件圖片",
+        "operationId": "SeitController_showImage_jwt",
+        "parameters": [
+          {
+            "name": "jwt",
+            "in": "path",
+            "description": "存放於JWT Token之測試郵件資訊及其驗證碼",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "image/png"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/tg/gazettes": {
+      "get": {
+        "tags": [
+          "tg"
+        ],
+        "summary": "取得所有公報資訊",
+        "operationId": "TgController_getGazettes",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Gazette"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tg/gazettes/refresh": {
+      "patch": {
+        "tags": [
+          "tg"
+        ],
+        "summary": "刷新/tg/gazettes Redis資料快取",
+        "operationId": "TgController_refresh",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Result"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/tg/gazettes/{gid}/file": {
+      "get": {
+        "tags": [
+          "tg"
+        ],
+        "summary": "下載特定的公報電子檔",
+        "operationId": "TgController_downloadFile",
+        "parameters": [
+          {
+            "name": "gid",
+            "in": "path",
+            "description": "公報流水號",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/pdf"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "file"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tg"
+        ],
+        "summary": "上傳特定公報電子檔",
+        "operationId": "TgController_uploadFile",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "gid",
+            "in": "path",
+            "description": "公報流水號",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "gazette",
+            "in": "formData",
+            "description": "公報電子檔",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Result"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "tg"
+        ],
+        "summary": "刪除特定公報電子檔",
+        "operationId": "TgController_deleteFile",
+        "parameters": [
+          {
+            "name": "gid",
+            "in": "path",
+            "description": "公報流水號",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Result"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Result": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "info": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "type": "object"
+        },
+        "time": {
+          "type": "number"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "number"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "token_type": {
+          "type": "string",
+          "example": "Bearer"
+        },
+        "expires_in": {
+          "type": "number"
+        }
+      }
+    },
+    "City": {
+      "type": "object",
+      "properties": {
+        "cid": {
+          "type": "number"
+        },
+        "city": {
+          "type": "string"
+        },
+        "city_en": {
+          "type": "string"
+        },
+        "introduction": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "emblem_url": {
+          "type": "string"
+        },
+        "alliances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CityAlliance"
+          }
+        },
+        "coid": {
+          "type": "number"
+        },
+        "country": {
+          "type": "string"
+        },
+        "country_en": {
+          "type": "string"
+        },
+        "caid": {
+          "type": "number"
+        },
+        "category": {
+          "type": "string"
+        },
+        "category_en": {
+          "type": "string"
+        }
+      }
+    },
+    "CityAlliance": {
+      "type": "object",
+      "properties": {
+        "signing_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "signing_place": {
+          "type": "string"
+        },
+        "moderator_tccg": {
+          "type": "string"
+        },
+        "moderator_sfc": {
+          "type": "string"
+        }
+      }
+    },
+    "Mail": {
+      "type": "object",
+      "properties": {
+        "mid": {
+          "type": "number"
+        },
+        "create_time": {
+          "type": "number"
+        },
+        "delivery_time": {
+          "type": "number"
+        },
+        "fail_time": {
+          "type": "number"
+        },
+        "mail_status": {
+          "type": "string"
+        },
+        "test_status": {
+          "type": "string"
+        },
+        "mtid": {
+          "type": "number"
+        },
+        "sid": {
+          "type": "number"
+        },
+        "rid": {
+          "type": "number"
+        },
+        "mail_template": {
+          "items": {
+            "$ref": "#/definitions/MailTemplate"
+          }
+        },
+        "sender": {
+          "items": {
+            "$ref": "#/definitions/Sender"
+          }
+        },
+        "recipient": {
+          "items": {
+            "$ref": "#/definitions/Recipient"
+          }
+        }
+      }
+    },
+    "MailTemplate": {
+      "type": "object",
+      "properties": {
+        "mtid": {
+          "type": "number"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    },
+    "Sender": {
+      "type": "object",
+      "properties": {
+        "sid": {
+          "type": "number"
+        },
+        "sender": {
+          "type": "string"
+        },
+        "addressor": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "number"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "reply_name": {
+          "type": "string"
+        },
+        "reply_address": {
+          "type": "string"
+        },
+        "confirm_reading": {
+          "type": "string"
+        }
+      }
+    },
+    "Recipient": {
+      "type": "object",
+      "properties": {
+        "rid": {
+          "type": "number"
+        },
+        "recipient": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "addressee": {
+          "type": "string"
+        }
+      }
+    },
+    "Gazette": {
+      "type": "object",
+      "properties": {
+        "gid": {
+          "type": "number"
+        },
+        "gazette": {
+          "type": "string"
+        },
+        "issue_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "create_time": {
+          "type": "number"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "gvid": {
+          "type": "number"
+        },
+        "giid": {
+          "type": "number"
+        },
+        "volume": {
+          "items": {
+            "$ref": "#/definitions/Volume"
+          }
+        },
+        "issue": {
+          "items": {
+            "$ref": "#/definitions/Issue"
+          }
+        }
+      }
+    },
+    "Volume": {
+      "type": "object",
+      "properties": {
+        "gvid": {
+          "type": "number"
+        },
+        "volume": {
+          "type": "string"
+        },
+        "year_roc": {
+          "type": "string"
+        },
+        "year": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "Issue": {
+      "type": "object",
+      "properties": {
+        "giid": {
+          "type": "number"
+        },
+        "issue": {
+          "type": "string"
+        },
+        "season": {
+          "type": "string"
+        },
+        "term": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
