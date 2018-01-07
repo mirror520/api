@@ -11,8 +11,8 @@
 */
 
 $app->get('/', function () {
-    echo '<p><a href="./docs">Go to API Document!</a></p>';
-    echo '<p><a href="http://mis.secretariat.taichung.gov.tw/">Go to Front-end APP!(Beta)</a></p>';
+    echo '<p><a href="./docs/">Go to API Document!</a></p>';
+    echo '<p><a href="https://mis.secretariat.taichung.gov.tw/">Go to Front-end APP!(Beta)</a></p>';
 });
 
 $app->get('/swagger.json', ['middleware' => 'cors', function() {
